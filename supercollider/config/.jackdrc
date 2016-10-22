@@ -1,0 +1,1 @@
+/usr/bin/jackd --no-realtime -d alsa
