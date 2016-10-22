@@ -50,15 +50,14 @@ RUN mkdir -p $HOME/src \
   && make -j4 \
   && make install \
   && ldconfig \
-  && cd .. \
+  && mv ../SCClassLibrary/Common/GUI/Base/Model.sc /usr/local/share/SuperCollider/SCClassLibrary/Common/Core/ \
   && mv /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI /usr/local/share/SuperCollider/SCClassLibrary/scide_scqt/GUI \
   && mv /usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI /usr/local/share/SuperCollider/SCClassLibrary/scide_scqt/JITLibGUI \
-  && mv SCClassLibrary/Common/GUI/Base/Model.sc /usr/local/share/SuperCollider/SCClassLibrary/Common/Core/ \
-  && cd .. \
-  && rm -rf src
+  && rm -rf $HOME/src
 
 RUN usermod -aG audio $USER
 
+# FIXME Can't activate realtime on Jackd, some permissions problem with $USER...
 #RUN dpkg-reconfigure -p high jackd
 
 # Copy configuration files
