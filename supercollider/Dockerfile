@@ -74,9 +74,6 @@ RUN mkdir -p $quarks_path \
 
 RUN usermod -aG audio $USER
 
-# FIXME Can't activate realtime on Jackd, some permissions problem with $USER...
-#RUN dpkg-reconfigure -p high jackd
-
 # Copy configuration files
 COPY ["config/.jackdrc", "$HOME/.jackdrc"]
 COPY ["config/startup.scd", "$HOME/.config/SuperCollider/startup.scd"]
