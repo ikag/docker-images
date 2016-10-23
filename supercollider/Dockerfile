@@ -79,6 +79,7 @@ RUN usermod -aG audio $USER
 
 # Copy configuration files
 COPY ["config/.jackdrc", "$HOME/.jackdrc"]
+COPY ["config/startup.scd", "$HOME/.config/SuperCollider/startup.scd"]
 
 # Fix permissions
 RUN chown -Rh $USER:$USER -- $HOME
