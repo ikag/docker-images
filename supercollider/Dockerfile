@@ -34,6 +34,7 @@ RUN apt-get update \
     libudev-dev \
     libxt-dev \
     pkg-config \
+    unzip \
     wget \
   \
   && rm -rf /var/lib/apt/lists/*
@@ -54,6 +55,22 @@ RUN mkdir -p $HOME/src \
   && mv /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI /usr/local/share/SuperCollider/SCClassLibrary/scide_scqt/GUI \
   && mv /usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI /usr/local/share/SuperCollider/SCClassLibrary/scide_scqt/JITLibGUI \
   && rm -rf $HOME/src
+
+ARG quarks_path=$HOME/.local/share/SuperCollider/downloaded-quarks
+
+# Download Quarks
+RUN mkdir -p $quarks_path \
+  && wget -q https://github.com/ikag/SuperDirt/archive/master.zip -O SuperDirt.zip \
+  && unzip SuperDirt.zip -d $quarks_path \
+  && rm SuperDirt.zip && mv $quarks_path/SuperDirt-master $quarks_path/SuperDirt \
+  \
+  && wget -q https://github.com/supercollider-quarks/Vowel/archive/master.zip -O Vowel.zip \
+  && unzip Vowel.zip -d $quarks_path \
+  && rm Vowel.zip && mv $quarks_path/Vowel-master $quarks_path/Vowel \
+  \
+  && wget -q https://github.com/d0kt0r0/Esp.sc/archive/master.zip -O Esp.sc.zip \
+  && unzip Esp.sc.zip -d $quarks_path \
+  && rm Esp.sc.zip && mv $quarks_path/Esp.sc-master $quarks_path/Esp
 
 RUN usermod -aG audio $USER
 
