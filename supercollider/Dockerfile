@@ -57,27 +57,26 @@ RUN mkdir -p $HOME/src \
   && rm -f /usr/local/share/SuperCollider/SCClassLibrary/deprecated/3.7/deprecated-3.7.sc \
   && rm -rf $HOME/src
 
-ARG quarks_path=$HOME/.local/share/SuperCollider/downloaded-quarks
+ARG quarks_path=$HOME/quarks
 
 # Download Quarks
 RUN mkdir -p $quarks_path \
-  && wget -q https://github.com/ikag/SuperDirt/archive/master.zip -O SuperDirt.zip \
+  && wget -q https://github.com/ikag/SuperDirt/archive/no-samples.zip -O SuperDirt.zip \
   && unzip SuperDirt.zip -d $quarks_path \
-  && rm SuperDirt.zip && mv $quarks_path/SuperDirt-master $quarks_path/SuperDirt \
+  && rm SuperDirt.zip && mv $quarks_path/SuperDirt-no-samples $quarks_path/SuperDirt \
+  && ln -s $quarks_path/SuperDirt /usr/local/share/SuperCollider/SCClassLibrary/ \
   \
   && wget -q https://github.com/supercollider-quarks/Vowel/archive/master.zip -O Vowel.zip \
   && unzip Vowel.zip -d $quarks_path \
   && rm Vowel.zip && mv $quarks_path/Vowel-master $quarks_path/Vowel \
+  && ln -s $quarks_path/Vowel /usr/local/share/SuperCollider/SCClassLibrary/ \
   \
   && wget -q https://github.com/d0kt0r0/Esp.sc/archive/master.zip -O Esp.sc.zip \
   && unzip Esp.sc.zip -d $quarks_path \
-  && rm Esp.sc.zip && mv $quarks_path/Esp.sc-master $quarks_path/Esp
+  && rm Esp.sc.zip && mv $quarks_path/Esp.sc-master $quarks_path/Esp \
+  && ln -s $quarks_path/Esp /usr/local/share/SuperCollider/SCClassLibrary/
 
 RUN usermod -aG audio $USER
-
-# Copy configuration files
-COPY ["config/.jackdrc", "$HOME/.jackdrc"]
-COPY ["config/startup.scd", "$HOME/.config/SuperCollider/startup.scd"]
 
 # Fix permissions
 RUN chown -Rh $USER:$USER -- $HOME
@@ -85,5 +84,9 @@ RUN chown -Rh $USER:$USER -- $HOME
 # Init
 USER $USER
 WORKDIR $HOME
+
+# Copy configuration files
+COPY ["config/.jackdrc", "$HOME/.jackdrc"]
+COPY ["config/startup.scd", "$HOME/.config/SuperCollider/startup.scd"]
 
 CMD ["sclang"]
